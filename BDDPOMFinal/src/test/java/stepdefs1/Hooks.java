@@ -6,24 +6,33 @@ import org.openqa.selenium.TakesScreenshot;
 import base1.TestBase;
 import io.cucumber.java.After;
 import io.cucumber.java.BeforeAll;
+import io.cucumber.java.AfterAll;
 import io.cucumber.java.Scenario;
 
 public class Hooks {
-	
-	@BeforeAll
-	public static void SetupDriver() {
-		TestBase.initDriver();
-	}
-	@After
-	public void tearDown(Scenario scenario) {
-		if(scenario.isFailed()) {
-			TakesScreenshot screen = (TakesScreenshot) TestBase.getDriver();;
-			byte[] img = screen.getScreenshotAs(OutputType.BYTES);
-//taking screenshot and storing as bytyes in byte array to attch to hyml file
-			scenario.attach(img, "image/png", "Screenshot");
-		
-	}
-	
 
-}
+    // This method will run once before any scenario
+    @BeforeAll
+    public static void setupDriver() {
+        TestBase.initDriver();  // Initialize WebDriver
+    }
+
+    // This method will run after each scenario
+    @After
+    public void tearDown(Scenario scenario) {
+        TakesScreenshot screen = (TakesScreenshot) TestBase.getDriver();
+        byte[] img = screen.getScreenshotAs(OutputType.BYTES);
+        
+        // Attach the screenshot to the report
+        scenario.attach(img, "image/png", scenario.getName() + " - Screenshot");
+    }
+
+    // This method will run once after all scenarios have completed
+    @AfterAll
+    public static void quitDriver() {
+        // Quit the driver after all tests have finished
+        if (TestBase.getDriver() != null) {
+            TestBase.getDriver().quit();
+        }
+    }
 }

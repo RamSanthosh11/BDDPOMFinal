@@ -5,7 +5,6 @@ Given User is on login Page
 When User enters credentials
   | username            | password   |
   | ramu33177@gmail.com | @Ramu4342  |
-
 Then User should be on Home page
 
 Scenario: Add Item to cart
